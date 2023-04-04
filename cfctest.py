@@ -1,3 +1,10 @@
+#1.Produce a program that:Scrape the index webpage hosted at `cfcunderwriting.com`
+#2.Writes a list of *all externally loaded resources* (e.g. images/scripts/fonts not hostedon cfcunderwriting.com) to a JSON output file.
+#3. Enumerates the page's hyperlinks and identifies the location of the "Privacy Policy"
+page
+#4. Use the privacy policy URL identified in step 3 and scrape the pages content.Produce a case-insensitive word frequency count for all of the
+#visible text on the page.Your frequency count should also be written to a JSON output file..
+
 from bs4 import BeautifulSoup 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -19,8 +26,8 @@ for img in soup.find_all('img'):
         #writing in json file and indenting to write in a list form
 with open('external_resources.json', 'w') as outfile:
     json.dump(external_resources, outfile, indent = 4)
+    
 #finding hyperlinks
-
 for link in soup.find_all('link'):
     if link.get('href') and not link['href'].startswith(url):
         external_resources.append(link['href'])
@@ -31,8 +38,6 @@ with open('external_resources.json', 'w') as outfile:
 # Find the Privacy Policy link
 tcs_links = soup.find('p', class_='tcs-links')
 privacy_policy_link = tcs_links.find('a', href=lambda href: href and 'privacy-policy' in href)
-
-# Get the href attribute and the text of the link
 privacy_policy_url = privacy_policy_link['href']
 privacy_policy_text = privacy_policy_link.text
 # get all visible text from the page
@@ -51,9 +56,7 @@ for word, count in word_count.items():
     #print(f'{word}: {count}')
     with open('privacy_policy.json', 'w') as outfile:
         json.dump(privacy_policy_url, outfile, indent = 4)
-
-
-
+ #finding fonts
 
 # Set up the Selenium web driver
 service = Service(r'C:\Users\WALEED TRADERS\Download\chromedriver_win32') 
